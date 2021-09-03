@@ -11,3 +11,4 @@ Projeto tarefas
 Nessa aula aprendemos a instalar a package path_provider, incluindo a dependencia
 no arquivo pubsped.yaml. Após isso, devemos digitar no prompt "flutter pub get" para atualizar as packages ("pub") do nosso projeto.
 
+![Alt text](maxresdefault.jpg?raw=true "Title")
