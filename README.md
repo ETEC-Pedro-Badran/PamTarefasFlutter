@@ -1,17 +1,13 @@
 # tarefas
 
-A new Flutter project.
+Projeto tarefas
 
-## Getting Started
+## Objetivo
+- Treinar desenvolvimento de interface;
+- Obtendo a pasta do projeto na plataforma,salvar e recuperar arquivos texto. Package: path_provider;
+- Formato de dados JSON;
+- Widgets: Row, Col,Expanded, Future, List, ListView.builder e ListTile;
 
-This project is a starting point for a Flutter application.
+Nessa aula aprendemos a instalar a package path_provider, incluindo a dependencia
+no arquivo pubsped.yaml. Após isso, devemos digitar no prompt "flutter pub get" para atualizar as packages ("pub") do nosso projeto.
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
-"# PamTarefasFlutter" 
