@@ -54,26 +54,33 @@ class _MyAppState extends State<MyApp> {
                   ],
                 ),
               ),
-              Expanded(
-                child: FutureBuilder(
-                    future: _readData(),
-                    builder: (context, snapshot) {
-                      if (snapshot.hasData) {
-                        List<dynamic> data = snapshot.data as List<dynamic>;
-                        return ListView.builder(
-                          itemCount: data.length,
-                          itemBuilder: (context, index) => ListTile(
-                            title: Text("${data[index]}"),
-                          ),
-                        );
-                      } else {
-                        return Center(
-                            child: CircularProgressIndicator(
-                          valueColor: AlwaysStoppedAnimation(Colors.red),
-                        ));
-                      }
-                    }),
-              )
+              FutureBuilder(
+                  // aguarda o método futuro terminar
+                  future: _readData(),
+                  // método com resposta no futuro (função assíncrona)
+                  builder: (context, snapshot) {
+                    // desenha a tela com os dados atuais.
+                    if (snapshot.hasData) {
+                      // caso tenha dados
+                      List<dynamic> data = snapshot.data as List<dynamic>;
+
+                      return Column(
+                        children: data
+                            .map((e) => ListTile(
+                                  leading:
+                                      CircleAvatar(child: Icon(Icons.pause)),
+                                  title: Text("$e"),
+                                ))
+                            .toList(),
+                      );
+                    } else {
+                      //caso não triver dados, mostre um indicador circular de progresso
+                      return Center(
+                          child: CircularProgressIndicator(
+                        valueColor: AlwaysStoppedAnimation(Colors.red),
+                      ));
+                    }
+                  })
             ],
           )),
     );
@@ -90,18 +97,22 @@ class _MyAppState extends State<MyApp> {
     String data =
         json.encode(_toDoList); //formata um arquivo texto no formato json
     File file = await _getFile();
-    file.writeAsString(data);
+    file.writeAsString(data); //escreve no arquivo
   }
 
   Future<dynamic> _readData() async {
     try {
-      File file = await _getFile();
-      String text = await file.readAsString();
-      var data = json.decode(text);
-      _toDoList = data.map<String>((e) => "$e").toList();
+      File file = await _getFile(); // objeto que controla o arquivo (file)
+      String text = await file.readAsString(); // li o conteúdo do arquivo
+      var data = json.decode(
+          text); // converti a string codificada em json para List<dynamic>
+      _toDoList = data
+          .map<String>((e) => "$e")
+          .toList(); // converti List<dynamic> para List<String> e guardei na variável _toDoList
       return data;
     } catch (e) {
       print("$e");
+      return [];
     }
   }
 }
