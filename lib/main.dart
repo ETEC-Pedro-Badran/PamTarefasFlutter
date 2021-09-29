@@ -44,7 +44,7 @@ class _MyAppState extends State<MyApp> {
                         onPressed: () async {
                           // avisa o builder para atualizar a tela
                           setState(() {
-                            // adicioanndo na lista de tarefas
+                            // adicionando na lista de tarefas
                             _toDoList.add(_textController.value.text);
                           });
                           // salvando no arquivo
@@ -66,10 +66,34 @@ class _MyAppState extends State<MyApp> {
 
                       return Column(
                         children: data
-                            .map((e) => ListTile(
-                                  leading:
-                                      CircleAvatar(child: Icon(Icons.pause)),
-                                  title: Text("$e"),
+                            .map((e) => Dismissible(
+                                  key: UniqueKey(),
+                                  onDismissed: (direction) {
+                                    _toDoList.remove(e);
+                                    _saveData();
+                                    return;
+                                  },
+                                  direction: DismissDirection.endToStart,
+                                  background: Container(
+                                    color: Colors.red,
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.end,
+                                      children: [
+                                        Text("Arraste para excluir",
+                                            style:
+                                                TextStyle(color: Colors.white)),
+                                        Icon(
+                                          Icons.delete,
+                                          color: Colors.white,
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                  child: ListTile(
+                                    leading:
+                                        CircleAvatar(child: Icon(Icons.pause)),
+                                    title: Text("$e"),
+                                  ),
                                 ))
                             .toList(),
                       );
