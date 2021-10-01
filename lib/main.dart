@@ -45,7 +45,10 @@ class _MyAppState extends State<MyApp> {
                           // avisa o builder para atualizar a tela
                           setState(() {
                             // adicionando na lista de tarefas
-                            _toDoList.add(_textController.value.text);
+                            _toDoList.add({
+                              'descricao': _textController.value.text,
+                              'realizado': false
+                            });
                           });
                           // salvando no arquivo
                           await _saveData();
@@ -69,7 +72,8 @@ class _MyAppState extends State<MyApp> {
                             .map((e) => Dismissible(
                                   key: UniqueKey(),
                                   onDismissed: (direction) {
-                                    _toDoList.remove(e);
+                                    _toDoList
+                                        .remove(e); //removendo o item da lista
                                     _saveData();
                                     return;
                                   },
@@ -90,9 +94,11 @@ class _MyAppState extends State<MyApp> {
                                     ),
                                   ),
                                   child: ListTile(
-                                    leading:
-                                        CircleAvatar(child: Icon(Icons.pause)),
-                                    title: Text("$e"),
+                                    leading: CircleAvatar(
+                                        child: e['realizado']
+                                            ? Icon(Icons.done)
+                                            : Icon(Icons.pause)),
+                                    title: Text("${e['descricao']}"),
                                   ),
                                 ))
                             .toList(),
@@ -110,7 +116,7 @@ class _MyAppState extends State<MyApp> {
     );
   }
 
-  var _toDoList = <String>[];
+  var _toDoList = <dynamic>[];
 
   Future<File> _getFile() async {
     final directory = await getApplicationDocumentsDirectory();
@@ -124,15 +130,13 @@ class _MyAppState extends State<MyApp> {
     file.writeAsString(data); //escreve no arquivo
   }
 
-  Future<dynamic> _readData() async {
+  _readData() async {
     try {
       File file = await _getFile(); // objeto que controla o arquivo (file)
       String text = await file.readAsString(); // li o conteúdo do arquivo
       var data = json.decode(
           text); // converti a string codificada em json para List<dynamic>
-      _toDoList = data
-          .map<String>((e) => "$e")
-          .toList(); // converti List<dynamic> para List<String> e guardei na variável _toDoList
+      _toDoList = data;
       return data;
     } catch (e) {
       print("$e");
