@@ -154,6 +154,9 @@ class _MyAppState extends State<MyApp> {
   }
 
   Future<void> _saveData() async {
+    //ordenar a lista, não realizados primeiro
+    // 0 mantém a ordem, 1- ordem crescente, -1 está na ordem decrescente
+    // Operador ternário: condicao ? valor para verdadeiro : valor para falso
     _toDoList.sort((a, b) {
       return a['realizado'] == b['realizado']
           ? 0
