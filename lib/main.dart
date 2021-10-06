@@ -72,6 +72,27 @@ class _MyAppState extends State<MyApp> {
                             .map((e) => Dismissible(
                                   key: UniqueKey(),
                                   onDismissed: (direction) {
+                                    ScaffoldMessenger.of(context)
+                                        .showSnackBar(SnackBar(
+                                            content: Row(
+                                      children: [
+                                        Text(
+                                          "Tarefa ${e['descricao']} excluida!",
+                                          style: TextStyle(fontSize: 16),
+                                        ),
+                                        TextButton(
+                                            onPressed: () {
+                                              _toDoList.add(e);
+                                              _saveData();
+                                              setState(() {});
+                                            },
+                                            child: Text(
+                                              "Cancelar",
+                                              style:
+                                                  TextStyle(color: Colors.red),
+                                            ))
+                                      ],
+                                    )));
                                     _toDoList
                                         .remove(e); //removendo o item da lista
                                     _saveData();
@@ -95,9 +116,18 @@ class _MyAppState extends State<MyApp> {
                                   ),
                                   child: ListTile(
                                     leading: CircleAvatar(
-                                        child: e['realizado']
-                                            ? Icon(Icons.done)
-                                            : Icon(Icons.pause)),
+                                        child: IconButton(
+                                            onPressed: () {
+                                              setState(() {
+                                                e['realizado'] =
+                                                    !e['realizado'];
+                                              });
+
+                                              _saveData();
+                                            },
+                                            icon: e['realizado']
+                                                ? Icon(Icons.done)
+                                                : Icon(Icons.pause))),
                                     title: Text("${e['descricao']}"),
                                   ),
                                 ))
@@ -124,6 +154,14 @@ class _MyAppState extends State<MyApp> {
   }
 
   Future<void> _saveData() async {
+    _toDoList.sort((a, b) {
+      return a['realizado'] == b['realizado']
+          ? 0
+          : a['realizado'] && !b['realizado']
+              ? 1
+              : -1;
+    });
+
     String data =
         json.encode(_toDoList); //formata um arquivo texto no formato json
     File file = await _getFile();
